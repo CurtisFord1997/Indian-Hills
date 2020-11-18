@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CheapLoansModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Loan">
+    <Key>
+      <PropertyRef Name="LoanNum" />
+    </Key>
+    <Property Name="LoanNum" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CustName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="LoanAmount" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+    <Property Name="AnnualIntRate" Type="decimal" Precision="3" Scale="3" Nullable="false" />
+    <Property Name="NumPayments" Type="int" Nullable="false" />
+  </EntityType>
+  <Function Name="InsertProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CustName" Type="varchar" Mode="In" />
+    <Parameter Name="LoanAmount" Type="decimal" Mode="In" />
+    <Parameter Name="AnnualIntRate" Type="decimal" Mode="In" />
+    <Parameter Name="NumPayments" Type="int" Mode="In" />
+  </Function>
+  <Function Name="StoredSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="CheapLoansModelStoreContainer">
+    <EntitySet Name="Loan" EntityType="Self.Loan" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

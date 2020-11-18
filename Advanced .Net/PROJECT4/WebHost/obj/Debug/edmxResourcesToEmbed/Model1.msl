@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CheapLoansModelStoreContainer" CdmEntityContainer="CheapLoansEntities">
+    <FunctionImportMapping FunctionImportName="SelectCustomer" FunctionName="CheapLoansModel.Store.SelectCustomer">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CheapLoansModel.SelectCustomer_Result">
+          <ScalarProperty Name="LoanNum" ColumnName="LoanNum" />
+          <ScalarProperty Name="CustName" ColumnName="CustName" />
+          <ScalarProperty Name="LoanAmount" ColumnName="LoanAmount" />
+          <ScalarProperty Name="AnnualIntRate" ColumnName="AnnualIntRate" />
+          <ScalarProperty Name="NumPayments" ColumnName="NumPayments" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="StoredSelect" FunctionName="CheapLoansModel.Store.StoredSelect">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CheapLoansModel.StoredSelect_Result">
+          <ScalarProperty Name="LoanNum" ColumnName="LoanNum" />
+          <ScalarProperty Name="CustName" ColumnName="CustName" />
+          <ScalarProperty Name="LoanAmount" ColumnName="LoanAmount" />
+          <ScalarProperty Name="AnnualIntRate" ColumnName="AnnualIntRate" />
+          <ScalarProperty Name="NumPayments" ColumnName="NumPayments" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

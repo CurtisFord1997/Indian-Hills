@@ -1,0 +1,9 @@
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\PROJECT3\DataGridSQLExample\obj\Debug\DataGridSQLExample.csprojAssemblyReference.cache
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\PROJECT3\DataGridSQLExample\obj\Debug\MainWindow.g.cs
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\PROJECT3\DataGridSQLExample\obj\Debug\App.g.cs
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\PROJECT3\DataGridSQLExample\obj\Debug\DataGridSQLExample_Content.g.cs
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\PROJECT3\DataGridSQLExample\obj\Debug\DataGridSQLExample_MarkupCompile.cache
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\PROJECT3\DataGridSQLExample\obj\Debug\DataGridSQLExample_MarkupCompile.lref
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\PROJECT3\DataGridSQLExample\obj\Debug\MainWindow.baml
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\PROJECT3\DataGridSQLExample\obj\Debug\DataGridSQLExample.exe
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\PROJECT3\DataGridSQLExample\obj\Debug\DataGridSQLExample.pdb

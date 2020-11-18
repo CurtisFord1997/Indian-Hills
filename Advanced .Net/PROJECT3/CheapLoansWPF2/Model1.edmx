@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CheapLoansModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Loan">
+          <Key>
+            <PropertyRef Name="LoanNum" />
+          </Key>
+          <Property Name="LoanNum" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LoanAmount" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="AnnualIntRate" Type="decimal" Precision="3" Scale="3" Nullable="false" />
+          <Property Name="NumPayments" Type="int" Nullable="false" />
+        </EntityType>
+        <Function Name="InsertProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustName" Type="varchar" Mode="In" />
+          <Parameter Name="LoanAmount" Type="decimal" Mode="In" />
+          <Parameter Name="AnnualIntRate" Type="decimal" Mode="In" />
+          <Parameter Name="NumPayments" Type="int" Mode="In" />
+        </Function>
+        <Function Name="StoredSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="CheapLoansModelStoreContainer">
+          <EntitySet Name="Loan" EntityType="Self.Loan" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CheapLoansModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Loan">
+          <Key>
+            <PropertyRef Name="LoanNum" />
+          </Key>
+          <Property Name="LoanNum" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LoanAmount" Type="Decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="AnnualIntRate" Type="Decimal" Precision="3" Scale="3" Nullable="false" />
+          <Property Name="NumPayments" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="CheapLoansEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Loans" EntityType="Self.Loan" />
+          <FunctionImport Name="InsertProcedure">
+            <Parameter Name="CustName" Mode="In" Type="String" />
+            <Parameter Name="LoanAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="AnnualIntRate" Mode="In" Type="Decimal" />
+            <Parameter Name="NumPayments" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="StoredSelect" ReturnType="Collection(CheapLoansModel.StoredSelect_Result)" />
+        </EntityContainer>
+        <ComplexType Name="StoredSelect_Result">
+          <Property Type="Int32" Name="LoanNum" Nullable="false" />
+          <Property Type="String" Name="CustName" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="LoanAmount" Nullable="false" Precision="9" Scale="2" />
+          <Property Type="Decimal" Name="AnnualIntRate" Nullable="false" Precision="3" Scale="3" />
+          <Property Type="Int32" Name="NumPayments" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CheapLoansModelStoreContainer" CdmEntityContainer="CheapLoansEntities">
+          <EntitySetMapping Name="Loans">
+            <EntityTypeMapping TypeName="CheapLoansModel.Loan">
+              <MappingFragment StoreEntitySet="Loan">
+                <ScalarProperty Name="LoanNum" ColumnName="LoanNum" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="LoanAmount" ColumnName="LoanAmount" />
+                <ScalarProperty Name="AnnualIntRate" ColumnName="AnnualIntRate" />
+                <ScalarProperty Name="NumPayments" ColumnName="NumPayments" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="InsertProcedure" FunctionName="CheapLoansModel.Store.InsertProcedure" />
+          <FunctionImportMapping FunctionImportName="StoredSelect" FunctionName="CheapLoansModel.Store.StoredSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CheapLoansModel.StoredSelect_Result">
+                <ScalarProperty Name="LoanNum" ColumnName="LoanNum" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="LoanAmount" ColumnName="LoanAmount" />
+                <ScalarProperty Name="AnnualIntRate" ColumnName="AnnualIntRate" />
+                <ScalarProperty Name="NumPayments" ColumnName="NumPayments" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,12 @@
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\Project4Console\obj\Debug\Project4Console.csprojAssemblyReference.cache
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\Project4Console\obj\Debug\Project4Console.csproj.CoreCompileInputs.cache
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\Project4Console\bin\Debug\Project4Console.exe.config
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\Project4Console\bin\Debug\Project4Console.exe
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\Project4Console\bin\Debug\Project4Console.pdb
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\Project4Console\obj\Debug\Project4Console.exe
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\Project4Console\obj\Debug\Project4Console.pdb
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\Project4Console\bin\Debug\Newtonsoft.Json.dll
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\Project4Console\bin\Debug\Newtonsoft.Json.xml
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\Project4Console\obj\Debug\Project4Console.Form1.resources
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\Project4Console\obj\Debug\Project4Console.csproj.GenerateResource.cache
+C:\Users\curti\OneDrive\Desktop\IHCC\Fall 2020\NET\AAPROJECTS\Project4Console\obj\Debug\Project4Console.csproj.CopyComplete

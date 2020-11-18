@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CheapLoansModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Loan">
+    <Key>
+      <PropertyRef Name="LoanNum" />
+    </Key>
+    <Property Name="LoanNum" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CustName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LoanAmount" Type="Decimal" Precision="9" Scale="2" Nullable="false" />
+    <Property Name="AnnualIntRate" Type="Decimal" Precision="3" Scale="3" Nullable="false" />
+    <Property Name="NumPayments" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="CheapLoansEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Loans" EntityType="Self.Loan" />
+    <FunctionImport Name="InsertProcedure">
+      <Parameter Name="CustName" Mode="In" Type="String" />
+      <Parameter Name="LoanAmount" Mode="In" Type="Decimal" />
+      <Parameter Name="AnnualIntRate" Mode="In" Type="Decimal" />
+      <Parameter Name="NumPayments" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="StoredSelect" ReturnType="Collection(CheapLoansModel.StoredSelect_Result)" />
+  </EntityContainer>
+  <ComplexType Name="StoredSelect_Result">
+    <Property Type="Int32" Name="LoanNum" Nullable="false" />
+    <Property Type="String" Name="CustName" Nullable="false" MaxLength="50" />
+    <Property Type="Decimal" Name="LoanAmount" Nullable="false" Precision="9" Scale="2" />
+    <Property Type="Decimal" Name="AnnualIntRate" Nullable="false" Precision="3" Scale="3" />
+    <Property Type="Int32" Name="NumPayments" Nullable="false" />
+  </ComplexType>
+</Schema>

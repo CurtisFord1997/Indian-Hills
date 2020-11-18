@@ -1,0 +1,30 @@
+﻿<Page x:Class="CheapLoansWPF2.AddData"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CheapLoansWPF2"
+      mc:Ignorable="d" 
+      d:DesignHeight="550" d:DesignWidth="800"
+      Title="AddData">
+
+    <Grid>
+        <Label Content="Cheap Loans" HorizontalAlignment="Left" Margin="242,10,0,0" VerticalAlignment="Top" FontSize="50"/>
+        <Label Content="Enter data in the respective boxes to add it to the database, all data is required." HorizontalAlignment="Left" Margin="114,92,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <GroupBox Header="Required Information" HorizontalAlignment="Left" Height="365" Margin="241,130,0,0" VerticalAlignment="Top" Width="315"/>
+        <Label Content="Customer Name:" HorizontalAlignment="Left" Margin="272,162,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtCustName" HorizontalAlignment="Left" Height="23" Margin="401,165,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Loan Amount:" HorizontalAlignment="Left" Margin="272,204,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtAmt" HorizontalAlignment="Left" Height="23" Margin="401,207,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Annual Interest Rate:" HorizontalAlignment="Left" Margin="272,248,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtIntRate" HorizontalAlignment="Left" Height="23" Margin="401,251,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Number of Payments:" HorizontalAlignment="Left" Margin="272,291,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtNumPmts" HorizontalAlignment="Left" Height="23" Margin="401,294,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="btnCalcPMT" Content="Calculate Monthly Payment" HorizontalAlignment="Left" Margin="322,381,0,0" VerticalAlignment="Top" Width="155" Click="btnCalcPMT_Click"/>
+        <Label Content="Monthly Payment" HorizontalAlignment="Left" Margin="272,338,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtMonthly" HorizontalAlignment="Left" Height="23" Margin="401,341,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+        <Button x:Name="btnViewData" Content="View Data" HorizontalAlignment="Left" Margin="363,450,0,0" VerticalAlignment="Top" Width="75" Click="btnViewData_Click"/>
+        <Button x:Name="btnSubmit" Content="Submit to Database" HorizontalAlignment="Left" Margin="338,420,0,0" VerticalAlignment="Top" Width="124" Click="btnSubmit_Click" IsEnabled="False"/>
+        <Label x:Name="lblErrorMsg" Content="Label" HorizontalAlignment="Left" Margin="587,162,0,0" VerticalAlignment="Top" Height="68" Width="180" IsEnabled="False" Visibility="Hidden"/>
+    </Grid>
+</Page>

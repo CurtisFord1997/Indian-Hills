@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSet Name="DataSet1">
+    <Query>
+      <DataSourceReference>TALDataSource</DataSourceReference>
+      <CommandType>StoredProcedure</CommandType>
+      <CommandText>ProcOrderSummary</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="ITEM_NUM">
+        <DataField>ITEM_NUM</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="DESCRIPTION">
+        <DataField>DESCRIPTION</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="NUM_ORDERED">
+        <DataField>NUM_ORDERED</DataField>
+        <rd:TypeName>System.Decimal</rd:TypeName>
+      </Field>
+      <Field Name="TOTAL_AMOUNT_ON_ORDER">
+        <DataField>TOTAL AMOUNT ON ORDER</DataField>
+        <rd:TypeName>System.Decimal</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>
