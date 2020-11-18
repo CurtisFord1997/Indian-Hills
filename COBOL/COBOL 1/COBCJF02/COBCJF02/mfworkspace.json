@@ -1,0 +1,23 @@
+{
+  "version": "4.0",
+  "cobol": {
+    "directives": {
+      "COBCJF02.cbl": [
+        "nologo",
+        "visualstudio\"3\"",
+        "noanim",
+        "sourcetabstop\"4\"",
+        "noquery",
+        "warnings\"1\"",
+        "COPYPATH(C:\\COBOL\\COBCJF02\\COBCJF02;%COBCPY%;\"C:\\Program Files (x86)\\Micro Focus\\Visual COBOL\\cpylib\\\";\"C:\\Program Files (x86)\\Micro Focus\\Visual COBOL\\cpylib\\basecl\";\"C:\\Program Files (x86)\\Micro Focus\\Visual COBOL\\cpylib\\guicl\";\"C:\\Program Files (x86)\\Micro Focus\\Visual COBOL\\cpylib\\olecl\";C:\\COBOL\\COBCJF02\\COBCJF02)",
+        "nologo",
+        "noanim",
+        "sourcetabstop\"4\"",
+        "warnings\"1\"",
+        "nognt",
+        "int()",
+        "anim"
+      ]
+    }
+  }
+}

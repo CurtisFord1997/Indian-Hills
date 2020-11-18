@@ -1,0 +1,232 @@
+define variables, set accumulators and counters to zero
+
+0000-MAIN.
+           PERFORM 1000-INIT.
+           PERFORM 2000-BODY
+               UNTIL MORE-RECS = "NO".
+           PERFORM 3000-CLOSING.
+           STOP RUN.
+
+       1000-INIT.
+           OPEN INPUT INPT.
+           OPEN OUTPUT PRTOUT.
+           OPEN OUTPUT ERROUT.
+
+           MOVE FUNCTION CURRENT-DATE TO CURRENT-DATE-AND-TIME.
+           MOVE I-YYYY TO YYYY.
+           MOVE I-MM TO MM.
+           MOVE I-DD TO DD.
+
+           PERFORM 9000-READ.
+           PERFORM 9100-VALID-HEADER.
+           PERFORM 9200-ERROR-HEADER.
+
+       2000-BODY.
+           PERFORM 2100-VALIDATION THRU 2100-X.
+           IF ERR-SW = 'NO'
+               PERFORM 2200-CALCS
+               PERFORM 2300-OUTPUT
+           ELSE
+               PERFORM 2400-ERROR
+           END-IF
+
+           PERFORM 9000-READ.
+
+       2100-VALIDATION.
+           MOVE 'YES' TO ERR-SW.
+           EVALUATE TRUE
+               WHEN I-LNAME = SPACES
+                   MOVE 'LAST NAME REQUIRED' TO ERROR-DESCR
+               WHEN I-FNAME = SPACES
+                   MOVE 'FIRST NAME REQUIRED' TO ERROR-DESCR
+               WHEN I-ADDRESS = SPACES
+                   MOVE 'ADDRESS REQUIRED' TO ERROR-DESCR
+               WHEN I-CITY = SPACES
+                   MOVE 'CITY REQIRED' TO ERROR-DESCR
+               WHEN I-STATE = SPACES 
+                   MOVE 'STATE REQIRED' TO ERROR-DESCR
+               WHEN NOT VAL-STATE
+                   MOVE 'STATE INVALID. IA, IL, MI, MO, NE, AND WI
+      -                'ARE THE ONLY VALID STATES' TO ERROR-DESCR
+               WHEN I-ZIP NOT NUMERIC
+                   MOVE 'ZIP CODE NOT NUMERIC' TO ERROR-DESCR
+               WHEN I-POP-TYPE NOT NUMERIC
+                   MOVE 'POP TYPE NOT NUMERIC, NEED VALUES 1-6'
+                       TO ERROR-DESCR
+               WHEN NOT VAL-POP-TYPE 
+                   MOVE 'POP-TYPE NEEDS TO BE 1-6' TO ERROR-DESCR
+               WHEN I-CASES NOT NUMERIC
+                   MOVE 'CASES NOT NUMERIC' TO ERROR-DESCR
+               WHEN NOT VAL-TEAM
+                   MOVE 'NOT A VALID TEAM. ONLY A THROUGH E'
+                       TO ERROR-DESCR
+               WHEN OTHER
+                   MOVE 'NO' TO ERR-SW
+           END-EVALUATE
+           PERFORM 2100-X.
+
+       2100-X.
+           EXIT.
+
+       2200-CALCS.
+           IF (I-STATE = 'IA' OR 'NE' OR 'WI')
+               COMPUTE DEPOSIT = 0.05 * 24 * I-CASES
+           ELSE
+               IF I-STATE = 'MI'
+                   COMPUTE DEPOSIT = 0.1 * 24 * I-CASES
+               ELSE
+                   MOVE 0 TO DEPOSIT
+               END-IF
+           END-IF.
+
+           COMPUTE TOTAL-SALES = I-CASES * 18.71 + DEPOSIT.
+
+           EVALUATE I-POP-TYPE
+               WHEN 1
+                   ADD I-CASES TO GT-CKE
+                   MOVE 'COKE' TO O-POP-TYPE
+               WHEN 2
+                   ADD I-CASES TO GT-DIET-CKE
+                   MOVE 'DIET COKE' TO O-POP-TYPE
+               WHEN 3
+                   ADD I-CASES TO GT-MELLOW
+                   MOVE 'MELLO YELLOW' TO O-POP-TYPE
+               WHEN 4
+                   ADD I-CASES TO GT-CHRY-CKE
+                   MOVE 'CHERRY COKE' TO O-POP-TYPE
+               WHEN 5
+                   ADD I-CASES TO GT-DIET-CHRY-CKE
+                   MOVE 'DIET CHERRY COKE' TO O-POP-TYPE
+               WHEN 6
+                   ADD I-CASES TO GT-SPRITE
+                   MOVE 'SPRITE' TO O-POP-TYPE
+           END-EVALUATE.
+
+           EVALUATE I-TEAM
+               WHEN 'A'
+                   ADD TOTAL-SALES TO GT-A
+               WHEN 'B'
+                   ADD TOTAL-SALES TO GT-B
+               WHEN 'C'
+                   ADD TOTAL-SALES TO GT-C
+               WHEN 'D'
+                   ADD TOTAL-SALES TO GT-D
+               WHEN 'E'
+                   ADD TOTAL-SALES TO GT-E
+           END-EVALUATE.
+
+       2300-OUTPUT.
+           MOVE I-LNAME TO O-LNAME.
+           MOVE I-FNAME TO O-FNAME.
+           MOVE I-CITY TO O-CITY.
+           MOVE I-STATE TO O-STATE.
+           MOVE I-ZIP1 TO O-ZIP1.
+           MOVE I-ZIP2 TO O-ZIP2.
+           MOVE I-CASES TO O-CASES.
+           MOVE DEPOSIT TO O-DEPOSIT.
+           MOVE TOTAL-SALES TO O-TOT-SALES.
+
+           WRITE PRTLINE FROM DATA-LINE
+               AFTER ADVANCING 2 LINES
+                   AT EOP 
+                       PERFORM 9100-VALID-HEADER.
+
+       2400-ERROR.
+           MOVE I-REC TO ERROR-RECORD.
+
+           WRITE ERRLINE FROM ERROR-LINE
+               AFTER ADVANCING 2 LINES
+                   AT EOP
+                       PERFORM 9200-ERROR-HEADER.
+
+       3000-CLOSING.
+           PERFORM 9100-VALID-HEADER.
+
+           WRITE PRTLINE FROM GT-POP-HEADING
+             AFTER ADVANCING 3 LINES.
+
+           MOVE 'COKE' TO POP1.
+           MOVE GT-CKE TO POP1-QTY.
+           MOVE 'DIET COKE' TO POP2.
+           MOVE GT-DIET-CKE TO POP2-QTY.
+           MOVE 'MELLOW YELLO' TO POP3.
+           MOVE GT-MELLOW TO POP3-QTY.
+
+           WRITE PRTLINE FROM GT-POP-LINE
+             AFTER ADVANCING 2 LINES.
+
+           MOVE 'CHERRY COKE' TO POP1.
+           MOVE GT-CHRY-CKE TO POP1-QTY.
+           MOVE 'DIET CHERRY COKE' TO POP2.
+           MOVE GT-DIET-CHRY-CKE TO POP2-QTY.
+           MOVE 'SPRITE' TO POP3.
+           MOVE GT-SPRITE TO POP3-QTY.
+
+           WRITE PRTLINE FROM GT-POP-LINE
+             AFTER ADVANCING 2 LINES.
+
+           WRITE PRTLINE FROM GT-TEAM-HEADING
+             AFTER ADVANCING 3 LINES.
+
+           MOVE 'A' TO GT-TEAM.
+           MOVE GT-A TO GT-TEAM-TOT.
+           WRITE PRTLINE FROM GT-TEAM-LINE
+             AFTER ADVANCING 2 LINES.
+
+           MOVE 'B' TO GT-TEAM.
+           MOVE GT-B TO GT-TEAM-TOT.
+           WRITE PRTLINE FROM GT-TEAM-LINE
+             AFTER ADVANCING 2 LINES.
+
+           MOVE 'C' TO GT-TEAM.
+           MOVE GT-C TO GT-TEAM-TOT.
+           WRITE PRTLINE FROM GT-TEAM-LINE
+             AFTER ADVANCING 2 LINES.
+
+           MOVE 'D' TO GT-TEAM.
+           MOVE GT-D TO GT-TEAM-TOT.
+           WRITE PRTLINE FROM GT-TEAM-LINE
+             AFTER ADVANCING 2 LINES.
+
+           MOVE 'E' TO GT-TEAM.
+           MOVE GT-E TO GT-TEAM-TOT.
+           WRITE PRTLINE FROM GT-TEAM-LINE
+             AFTER ADVANCING 2 LINES.
+
+           MOVE GT-ERRORS TO GT-ERROR.
+           WRITE ERRLINE FROM GT-ERROR-LINE.
+
+           CLOSE INPT.
+           CLOSE PRTOUT.
+           CLOSE ERROUT.
+
+       9000-READ.
+           READ INPT
+               AT END
+                   MOVE 'NO' TO MORE-RECS.
+
+       9100-VALID-HEADER.
+           ADD 1 TO PG-DATA.
+           MOVE PG-DATA TO PG.
+
+           WRITE PRTLINE FROM COMP-TITLE1
+               AFTER ADVANCING PAGE.
+           WRITE PRTLINE FROM COMP-TITLE2
+               AFTER ADVANCING 1 LINE.
+           WRITE PRTLINE FROM SALES-TITLE
+               AFTER ADVANCING 1 LINE.
+           WRITE PRTLINE FROM COLUMB-HEADINGS
+               AFTER ADVANCING 2 LINES.
+                     
+       9200-ERROR-HEADER.
+           ADD 1 TO PG-ERROR
+           MOVE PG-ERROR TO PG.
+
+           WRITE ERRLINE FROM COMP-TITLE1
+               AFTER ADVANCING PAGE.
+           WRITE ERRLINE FROM COMP-TITLE2
+               AFTER ADVANCING 1 LINE.
+           WRITE ERRLINE FROM ERROR-TITLE
+               AFTER ADVANCING 1 LINE.
+           WRITE ERRLINE FROM ERROR-HEADINGS
+               AFTER ADVANCING 2 LINES.

@@ -1,0 +1,102 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DATE: 02/11/2020                                    ALBIA SOCCER CLUB FUNDRAISER                                            PAGE:  1
+COBCJF05                                                  CURTIS DIVISION                                                           
+                                                            ERROR REPORT                                                            
+
+ERROR RECORD                                                            ERROR DESCRIPTION                                           
+
+               JIM            1 SILVER ST    OGALALLA  IA1234567890101A LAST NAME REQUIRED                                          
+
+Horace                        1 SILVER ST    OGALALLA  IA4315634320101A FIRST NAME REQUIRED                                         
+
+Horace         JIM                           OGALALLA  IA0000001230101A ADDRESS REQUIRED                                            
+
+Horace         JIM            1 SILVER ST              IA0000001230101A CITY REQIRED                                                
+
+Horace         JIM            1 SILVER ST    OGALALLA    0000001230101A STATE REQIRED                                               
+
+Horace         JIM            1 SILVER ST    OGALALLA  TN0000001230101A STATE INVALID, NEED IA, IL, MI, MO, NE, OR WI               
+
+Horace         JIM            1 SILVER ST    OGALALLA  IA         0101A ZIP CODE NOT NUMERIC                                        
+
+Horace         JIM            1 SILVER ST    OGALALLA  IAAXM      0101A ZIP CODE NOT NUMERIC                                        
+
+Horace         JIM            1 SILVER ST    OGALALLA  IA000000123  01A POP TYPE NOT NUMERIC, NEED VALUES 1-6                       
+
+Horace         JIM            1 SILVER ST    OGALALLA  IA0000001233E01A POP TYPE NOT NUMERIC, NEED VALUES 1-6                       
+
+Horace         JIM            1 SILVER ST    OGALALLA  IA0000001230001A POP-TYPE NEEDS TO BE 1-6                                    
+
+Horace         JIM            1 SILVER ST    OGALALLA  IA0000001230701A POP-TYPE NEEDS TO BE 1-6                                    
+
+Horace         JIM            1 SILVER ST    OGALALLA  IA00000012301  A CASES NOT NUMERIC                                           
+
+Horace         JIM            1 SILVER ST    OGALALLA  IA00000012301KJA CASES NOT NUMERIC                                           
+
+Horace         JIM            1 SILVER ST    OGALALLA  IA0000001230100A AT LEAST ONE CASE REQUIRED                                  
+
+Horace         JIM            1 SILVER ST    OGALALLA  IA0000001230101  NOT A VALID TEAM. ONLY A THROUGH E                          
+
+Horace         JIM            1 SILVER ST    OGALALLA  IA0000001230101F NOT A VALID TEAM. ONLY A THROUGH E                          
+
+
+TOTAL ERRORS    17                                                                                                                  

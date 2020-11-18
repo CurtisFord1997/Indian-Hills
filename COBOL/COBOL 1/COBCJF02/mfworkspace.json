@@ -1,0 +1,14 @@
+{
+  "version": "4.0",
+  "cobol": {
+    "directives": {
+      "**/*": [
+        "nognt",
+        "int()",
+        "anim",
+        "max-error\"100\"",
+        "copypath($COBCPY;COBCJF02)"
+      ]
+    }
+  }
+}

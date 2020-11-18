@@ -1,0 +1,354 @@
+       identification division.
+       program-id. COBCJF01.
+
+       environment division.
+       configuration section.
+
+       data division.
+       working-storage section.
+
+       01 ERR-REC PIC X(132).
+
+       01 ERR-LINE.
+           05 FILLER               PIC X(5)    VALUE SPACES.
+           05 ERR-MSG              PIC X(127).
+
+       01 CURRENT-DATE-AND-TIME.
+           05 CURR-DATE            PIC 9(8).
+           05 I-TIME               PIC X(11).
+
+       01 END-DATE.
+           05 C-END-YYYY           PIC 9(4).
+           05 C-END-MM             PIC 99.
+           05 C-END-DD             PIC 99.
+
+       01 MAX-DAYS-IN-MONTH        PIC 99.
+
+       01 EOF                      PIC X.
+       01 LEAP-RMDR                PIC 9.
+       01 RECORDS-W-ERR            PIC 99.
+       01 ERRS-TOT                 PIC 9(4).
+
+       01 ERROR-SWITCHES.
+           05 ERR-SW               PIC X.
+           05 CAMP-SW              PIC X.
+           05 SITE-SW              PIC X.
+           05 DATE-SW              PIC X.
+           05 STAY-SW              PIC X.
+           
+       COPY "ERROR.CPY".
+       COPY "TRAN.CPY".
+       COPY "VAL.CPY".
+       COPY "CAMP.CPY".
+
+       01 INPUT-REDEFING-AREA REDEFINES TRAN-REC.
+           05 CAMPGROUND           PIC X(25).
+               88 VAL-CAMPGROUND                   VALUE "BUCK CREEK"
+                                                         "HONEY CREEK"
+                                                         "ISLAND VIEW".
+           05 SITE-LTR             PIC X.
+           05 SITE-NUM             PIC 99.
+               88 VAL-SITE-NUM                     VALUE 1 THRU 99.
+           05  C-DATE-YYYY         PIC 9(4).
+           05 C-DATE-MM            PIC 99.
+               88 VAL-DATE-MM                      VALUE 1 THRU 12.
+               88 VAL-DATE-MM-31-DS                VALUE 1 3 5 7 8 10 
+                                                         12.
+               88 VAL-DATE-MM-30-DS                VALUE 4 6 9 11.
+           05 C-DATE-DD            PIC 99.
+           05 R-LEN-STAY           PIC 99.
+               88 VAL-LEN-STAY                     VALUE 1 THRU 12.
+           05 FILLER               PIC X(26).
+           05 R-CCTYPE             PIC X.
+               88 VAL-CCTYPE                       VALUE "V" "M" "A".
+
+           05 CC-NUM-PART          PIC 9(4) OCCURS 4.
+           05 C-CCEXP-YYYY         PIC 9(4).
+           05 C-CCEXP-MM           PIC 99.
+               88 VAL-CCEXP-MM                     VALUE 1 THRU 12.
+               88 VAL-CCEXP-MM-31DS                VALUE 1 3 5 7 8 10 
+                                                         12.
+               88 VAL-CCEXP-MM-30-DS               VALUE 4 6 9 11.
+           05 C-CCEXP-DD           PIC 99.
+       procedure division.
+       L1-MAIN.
+           PERFORM L2-INIT.
+           PERFORM L2-MAINLINE
+             UNTIL EOF = 'T'.
+           PERFORM L2-CLOSING.
+           STOP RUN.
+
+       L2-INIT.
+      *INITILIZE VARIABLES
+      *OPEN FILES
+           PERFORM L3-ERR-HEADINGS.
+           PERFORM L3-READ.
+
+       L2-MAINLINE.
+           PERFORM L3-VALIDATION.
+           IF ERR-SW = 'F'
+               PERFORM L3-CALC-END-DATE
+               PERFORM L3-MANIPULATE-STRINGS
+               PERFORM L3-OUTPUT
+           END-IF.
+           PERFORM L3-READ.
+
+       L2-CLOSING.
+
+       L3-ERR-HEADINGS.
+      *DO THE HEADINGS FOR THE ERROR REPORT
+       L3-READ.
+      *READ FILE
+       L3-VALIDATION.
+           MOVE 'F' TO CAMP-SW.
+           MOVE 'F' TO SITE-SW.
+           MOVE 'F' TO DATE-SW.
+           MOVE 'F' TO STAY-SW.
+           MOVE 'F' TO ERR-SW.
+           
+           IF NOT VAL-CAMPGROUND
+               MOVE 'T' TO CAMP-SW
+               MOVE ERRORS(1) TO ERR-MSG
+               PERFORM L4-MAIN-ERROR
+           END-IF.
+      *CHECK THE SITE FIRST LETTER
+           IF SITE-LTR NUMERIC
+               MOVE 'T' TO SITE-SW
+               MOVE ERRORS(2) TO ERR-MSG
+               PERFORM L4-MAIN-ERROR
+           END-IF.
+           IF SITE-LTR NOT ALPHABETIC
+               MOVE 'T' TO SITE-SW
+               MOVE ERRORS(3) TO ERR-MSG
+               PERFORM L4-MAIN-ERROR
+           END-IF.
+           IF SITE-LTR = SPACE
+               MOVE 'T' TO SITE-SW
+               MOVE ERRORS(4) TO ERR-MSG
+               PERFORM L4-MAIN-ERROR
+           END-IF.
+      *CHECK THE SITE TWO DIDGET NUMBER
+           IF SITE-NUM NOT NUMERIC
+               MOVE 'T' TO SITE-SW
+               MOVE ERRORS(5) TO ERR-MSG
+               PERFORM L4-MAIN-ERROR
+           ELSE
+               IF NOT VAL-SITE-NUM
+                   MOVE 'T' TO SITE-SW
+                   MOVE ERRORS(6) TO ERR-MSG
+                   PERFORM L4-MAIN-ERROR
+               END-IF
+           END-IF.
+      *CHECKS TO MAKE SURE THE DATE IS VALID
+           EVALUATE TRUE
+               WHEN I-DATE NOT NUMERIC
+                   MOVE 'T' TO DATE-SW
+                   MOVE ERRORS(7) TO ERR-MSG
+                   PERFORM L4-MAIN-ERROR
+               WHEN I-DATE > CURR-DATE
+                   MOVE 'T' TO DATE-SW
+                   MOVE ERRORS(8) TO ERR-MSG
+                   PERFORM L4-MAIN-ERROR
+               WHEN NOT VAL-DATE-MM
+                   MOVE 'T' TO DATE-SW
+                   MOVE ERRORS(9) TO ERR-MSG
+                   PERFORM L4-MAIN-ERROR
+               WHEN C-DATE-DD < 1
+                   MOVE 'T' TO DATE-SW
+                   MOVE ERRORS(10) TO ERR-MSG
+                   PERFORM L4-MAIN-ERROR
+               WHEN VAL-DATE-MM-31-DS
+                   IF C-DATE-DD > 31
+                       MOVE 'T' TO DATE-SW
+                       MOVE ERRORS(11) TO ERR-MSG
+                       PERFORM L4-MAIN-ERROR
+                   END-IF
+               WHEN VAL-DATE-MM-30-DS
+                   IF C-DATE-DD > 30
+                       MOVE 'T' TO DATE-SW
+                       MOVE ERRORS(12) TO ERR-MSG
+                       PERFORM L4-MAIN-ERROR
+                   END-IF
+               WHEN OTHER
+                   DIVIDE C-DATE-YYYY BY 4 GIVING LEAP-RMDR
+                       REMAINDER LEAP-RMDR
+                   IF LEAP-RMDR > 0
+                       IF C-DATE-DD > 28
+                           MOVE 'T' TO DATE-SW
+                           MOVE ERRORS(13) TO ERR-MSG
+                           PERFORM L4-MAIN-ERROR
+                       END-IF
+                   ELSE
+                       MOVE 'T' TO DATE-SW
+                       MOVE ERRORS(14) TO ERR-MSG
+                       PERFORM L4-MAIN-ERROR
+                   END-IF
+           END-EVALUATE.
+      *CHECKS TO SEE IF THE LENGTH OF STAY IS VALID 
+           IF I-LEN-STAY NOT NUMERIC
+               MOVE 'T' TO STAY-SW
+               MOVE ERRORS(15) TO ERR-MSG
+               PERFORM L4-MAIN-ERROR
+           ELSE
+               IF NOT VAL-LEN-STAY
+                   MOVE 'T' TO STAY-SW
+                   MOVE ERRORS(16) TO ERR-MSG
+                   PERFORM L4-MAIN-ERROR
+               END-IF
+           END-IF.
+      *CHECKS TO MAKE SURE LNAME CONTAINS DATA
+           IF I-LNAME = SPACES
+               MOVE ERRORS(17) TO ERR-MSG
+               PERFORM L4-MAIN-ERROR
+           END-IF.
+      *CHECKS TO MAKE SURE LNAME CONTAINS DATA
+           IF I-FNAME = SPACES
+               MOVE ERRORS(18) TO ERR-MSG
+               PERFORM L4-MAIN-ERROR
+           END-IF
+      *CHECKS TO SEE IF I-AMT IS NUMERIC, AND IF IT IS IT CHECKS TO 
+      *MAKE SURE THAT I-AMT WOULD MATCH HOW MUCH IT WOULD COST FOR
+      *THAT PARTICULAR SITE BASED ON IT'S RATE AND THE STAY
+           IF I-AMT NOT NUMERIC
+               MOVE ERRORS(19) TO ERR-MSG
+               PERFORM L4-MAIN-ERROR
+           ELSE
+               IF CAMP-SW = 'T'
+                   IF STAY-SW = 'T'
+                       SET SITE-INDEX TO 1
+
+                       SEARCH SITE-GROUP
+                           WHEN SITE(SITE-INDEX) = SITE-LTR
+                               SET SITE-INDEX TO SITE-INDEX
+                       END-SEARCH
+                       IF I-AMT NOT = I-LEN-STAY * PRICE(SITE-INDEX)
+                           MOVE ERRORS(20) TO ERR-MSG
+                           PERFORM L4-MAIN-ERROR
+                       END-IF
+                   END-IF
+               END-IF
+           END-IF. 
+      *USES THE LVL88 TO CHECK THE CCTYPE
+           IF NOT VAL-CCTYPE
+               MOVE ERRORS(21) TO ERR-MSG
+               PERFORM L4-MAIN-ERROR
+           END-IF
+      *CHECKS TO MAKE SURE THE CREDIT CARD NUMBER IS NUMERIC
+           IF I-CCNUM NOT NUMERIC
+               MOVE ERRORS(22) TO ERR-MSG
+               PERFORM L4-MAIN-ERROR
+           END-IF
+      *CHECKS TO MAKE SURE EXPERATION DATE IS NUMERIC
+           EVALUATE TRUE
+               WHEN I-CCEXP NOT NUMERIC
+                   MOVE ERRORS(23) TO ERR-MSG
+                   PERFORM L4-MAIN-ERROR
+               WHEN I-CCEXP > CURR-DATE
+                   MOVE ERRORS(24) TO ERR-MSG
+                   PERFORM L4-MAIN-ERROR
+               WHEN NOT VAL-CCEXP-MM
+                   MOVE ERRORS(25) TO ERR-MSG
+                   PERFORM L4-MAIN-ERROR
+               WHEN C-CCEXP-DD < 1
+                   MOVE ERRORS(26) TO ERR-MSG
+                   PERFORM L4-MAIN-ERROR
+               WHEN VAL-CCEXP-MM-31DS
+                   IF C-CCEXP-DD > 31
+                       MOVE ERRORS(27) TO ERR-MSG
+                       PERFORM L4-MAIN-ERROR
+                   END-IF
+               WHEN VAL-CCEXP-MM-30-DS
+                   IF C-CCEXP-DD > 30
+                       MOVE ERRORS(28) TO ERR-MSG
+                       PERFORM L4-MAIN-ERROR
+                   END-IF
+               WHEN OTHER
+                   DIVIDE C-CCEXP-YYYY BY 4 GIVING LEAP-RMDR
+                     REMAINDER LEAP-RMDR
+                   IF LEAP-RMDR > 0
+                       IF C-CCEXP-DD > 28
+                           MOVE ERRORS(29) TO ERR-MSG
+                           PERFORM L4-MAIN-ERROR
+                       END-IF
+                   ELSE
+                       IF C-CCEXP-DD > 29
+                           MOVE ERRORS(30) TO ERR-MSG
+                           PERFORM L4-MAIN-ERROR
+                       END-IF
+           END-EVALUATE.
+
+
+
+       L3-CALC-END-DATE.
+           EVALUATE TRUE
+               WHEN VAL-DATE-MM-31-DS
+                   MOVE 31 TO MAX-DAYS-IN-MONTH
+               WHEN VAL-DATE-MM-30-DS
+                   MOVE 30 TO MAX-DAYS-IN-MONTH
+               WHEN OTHER
+                   DIVIDE C-DATE-YYYY BY 4 GIVING LEAP-RMDR
+                     REMAINDER LEAP-RMDR
+                   IF LEAP-RMDR > 0
+                       MOVE 28 TO MAX-DAYS-IN-MONTH
+                   ELSE
+                       MOVE 29 TO MAX-DAYS-IN-MONTH
+                   END-IF
+           END-EVALUATE.
+
+           IF C-DATE-DD + I-AMT > MAX-DAYS-IN-MONTH
+               COMPUTE C-END-DD = C-DATE-DD + I-AMT - MAX-DAYS-IN-MONTH
+               IF C-DATE-MM = 12
+                   COMPUTE C-END-MM = 1
+                   COMPUTE C-END-YYYY = C-DATE-YYYY + 1
+               ELSE
+                   COMPUTE C-END-MM = C-DATE-MM + 1
+                   COMPUTE C-END-YYYY = C-DATE-YYYY
+               END-IF
+           ELSE
+               COMPUTE C-END-DD = C-DATE-DD + I-AMT
+               COMPUTE C-END-MM = C-DATE-MM
+               COMPUTE C-END-YYYY = C-DATE-YYYY
+           END-IF.
+
+       L3-MANIPULATE-STRINGS.
+           STRING I-LNAME '**' I-FNAME
+               DELIMITED BY SPACE
+                   INTO O-NAME
+           INSPECT O-NAME REPLACING ALL '**' BY ', '.
+
+           EVALUATE I-CCTYPE
+               WHEN 'V'
+                   MOVE 'VISA' TO O-CCTYPE
+               WHEN 'M'
+                   MOVE 'MASTER CARD' TO O-CCTYPE
+               WHEN 'A'
+                   MOVE 'AMERICAN EXPRESS' TO O-CCTYPE
+           END-EVALUATE.
+
+           STRING CC-NUM-PART(1) '-' CC-NUM-PART(2) '-'
+                  CC-NUM-PART(2) '-' CC-NUM-PART(4)
+               INTO O-CCNUM.
+
+       L3-OUTPUT.
+
+       L4-MAIN-ERROR.
+           IF ERR-SW = 'F'
+               MOVE TRAN-REC TO ERR-REC
+               ADD 1 TO RECORDS-W-ERR
+               WRITE ERRLINE FROM ERR-REC
+                   AFTER ADVANCING 1 LINE
+           END-IF.
+           WRITE ERRLINE FROM ERR-LINE
+             AFTER ADVANCING 1 LINE
+               AT EOP
+                   PERFORM L3-ERR-HEADINGS.
+           ADD 1 TO ERRS-TOT.
+           MOVE 'T' TO ERR-SW.
+           
+       end program COBCJF01.
+
+
+      *ERROR FILE
+      *THE LINE FROM THE FILE  COUNT NUMBER OF LINES W ERRORS  FOR GT
+      *    ERROR MESSAGE 1     ALSO COUNT THESE FOR GT
+      *    ERROR MESSAGE 2

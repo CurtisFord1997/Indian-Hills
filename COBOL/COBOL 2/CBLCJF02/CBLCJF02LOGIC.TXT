@@ -1,0 +1,197 @@
+       identification division.
+       program-id. CBLCJF.
+
+       environment division.
+       INPUT-OUTPUT SECTION.
+
+       FILE-CONTROL.
+           SELECT INPT
+               ASSIGN TO "C:/COBOLSP20/WAKEBOARDS.DAT"
+               ORGANIZATION IS LINE SEQUENTIAL.
+           SELECT PRTOUT
+               ASSIGN TO "C:/COBOLSP20/WAKEBOARDS.PRT"
+               ORGANIZATION IS RECORD SEQUENTIAL.
+
+       data division.
+       FILE SECTION.
+       FD INPT
+           LABEL RECORD IS STANDARD
+           DATA RECORD IS I-REC
+           RECORD CONTAINS 16 CHARACTERS.
+
+       01 I-WAKEBOARD.
+           05 I-UPC          PIC X(12).
+           05 I-BOARD        PIC 99.
+           05 I-LENGTH       PIC XX.
+
+       01 UPC-BREAKUP REDEFINES I-WAKEBOARD
+           05 XX             PIC XX.
+           05 XXX-X          PIC XXX.
+           05 X-XXX-X        PIC XXX.
+           05 XXXX           PIC X(4).
+           05 FILLER         PIC X(4).
+       FD PRTOUT
+           LABEL RECORD IS STANDARD
+           DATA RECORD IS VAL-REC
+           RECORD CONTAINS 96 CHARACTERS
+           LINAGE IS 60 WITH FOOTING AT 56.
+
+       01 PRTLINE PIC X(132).
+
+       working-storage section.
+       01 GEN-INDEX          PIC 99.
+       01 EOF                PIC X          VALUE 'F'.
+
+       01 SIZE-AREA.
+           05 FILLER         PIC X(13)       VALUE "111-117XS".
+           05 FILLER         PIC X(13)       VALUE "118-123S ".
+           05 FILLER         PIC X(13)       VALUE "124-133M ".
+           05 FILLER         PIC X(13)       VALUE "134-141L ".
+           05 FILLER         PIC X(13)       VALUE "142-146XL".
+
+       01 SIZE-TABLE REDEFINES SIZE-AREA.
+           05 SIZE-CONTAINER OCCURS 5
+               INDEXED BY SIZE-INDEX.
+               10 CM-MAX     PIC X(7).
+               10 BRD-SIZE   PIC XX.
+               10 GT-SIZE    PIC 9999.
+
+       COPY "BOARDS.CPY".
+       01 BOARD-AREA.
+           05 FILLER         PIC X(18)      VALUE "Shane Hybrid 52999".
+           05 FILLER         PIC X(18)      VALUE "Watson Hybrid46999".
+           05 FILLER         PIC X(18)      VALUE "Peak Hybrid  00899".
+           05 FILLER         PIC X(18)      VALUE "FLX          64999".
+           05 FILLER         PIC X(18)      VALUE "Slab         57999".
+           05 FILLER         PIC X(18)      VALUE "Deluxe Hybrid49900".
+           05 FILLER         PIC X(18)      VALUE "B.O.B. Grind 54999".
+           05 FILLER         PIC X(18)      VALUE "Super Trip   49950".
+           05 FILLER         PIC X(18)      VALUE "Tex          42999".
+           05 FILLER         PIC X(18)      VALUE "Witness      29999".
+           05 FILLER         PIC X(18)      VALUE "S4           34999".
+           05 FILLER         PIC X(18)      VALUE "Nemesis      29999".
+           05 FILLER         PIC X(18)      VALUE "Nemesis Grind27999".
+           05 FILLER         PIC X(18)      VALUE "Wing         54999".
+           05 FILLER         PIC X(18)      VALUE "Angel        39999".
+           05 FILLER         PIC X(18)      VALUE "Melissa Grind49900".
+           05 FILLER         PIC X(18)      VALUE "Star         27899".
+           05 FILLER         PIC X(18)      VALUE "Jett Grind   34999".
+		   
+	   01 BOARD-TABLE REDEFINES BOARD-AREA.
+		   05 RANDNAME3 OCCURS 18.
+		        10 BRD-NME   PIC X(13).
+			    10 BRD-COST  PIC 999V99.
+
+       01 CURRENT-DATE-AND-TIME.
+           05 I-DATE.
+               10 I-YYYY     PIC 9(4).
+               10 I-MM       PIC 99.
+               10 I-DD       PIC 99.
+           05 I-TIME         PIC X(11).
+
+       01 COMP-TITLE1.
+           05 FILLER         PIC X(6)       VALUE 'DATE:'.
+           05 COMP-DATE.
+               10 MM         PIC 99.
+               10 FILLER     PIC X          VALUE '/'.
+               10 DD         PIC 99.
+               10 FILLER     PIC X          VALUE '/'.
+               10 YYYY       PIC 9(4).
+           05 FILLER         PIC X(36)      VALUE SPACE.
+           05 FILLER         PIC X(72)      VALUE ' '.
+           05 FILLER         PIC X(6)       VALUE 'PAGE:'.
+           05 PG             PIC Z9.
+
+       01 COMP-TITLE2.
+           05 FILLER         PIC X(58)      VALUE 'CBLCJF02'.
+           05 FILLER         PIC X(74)      VALUE ' '.
+
+       01 BOARD-GT-TABLE.
+           05 BOARD-SALES    PIC 9(3)       OCCURS 18.
+          
+       01 GT-SALES           PIC 9999       VALUE 0.
+       procedure division.
+
+       L1-MAIN.
+           PERFORM L2-INIT.
+           PERFORM L2-MAINLINE
+               UNTIL EOF = 'T'.
+           PERFORM L2-CLOSING.
+           STOP RUN.
+
+       L2-INIT.
+           OPEN INPUT INPT.
+           OPEN OUTPUT PRTOUT.
+
+           MOVE FUNCTION CURRENT-DATE TO CURRENT-DATE-AND-TIME.
+           MOVE I-YYYY TO YYYY.
+           MOVE I-MM TO MM.
+           MOVE I-DD TO DD.
+
+           PERFORM 
+               VARYING GEN-INDEX FROM 1 BY 1
+               UNTIL GEN-INDEX > 5
+                   MOVE 0 TO GT-SIZE(GEN-INDEX)
+           END-PERFORM.
+           
+            PERFORM 
+               VARYING GEN-INDEX FROM 1 BY 1
+               UNTIL GEN-INDEX > 8
+                   MOVE 0 TO BOARD-SALES(GEN-INDEX)
+           END-PERFORM.
+
+           PERFORM L3-MAJOR-HEADINGS.
+           PERFORM L3-NORM-HEADINGS.
+
+           PERFORM L3-READ.
+
+       L2-MAINLINE.
+           PERFORM L3-INTERPRET.
+           PERFORM L3-CALCS.
+           PERFORM L3-PRINT.
+           PERFORM L3-READ.
+
+       L2-CLOSING.
+           PERFORM L3-MAJOR-HEADINGS.
+
+      *COLUMN HEADINGS FOR BOARD STUFF
+
+           PERFORM VARYING GEN-INDEX FROM 1 BY 1
+               UNTIL GEN-INDEX > 18
+                   MOVE BRD-NME(GEN-INDEX) TO O-GT-NAME
+                   MOVE BOARD-SALES(GEN-INDEX) TO O-GT-BOARD-SALES
+                   WRITE PRTLINE FROM GT-BOARD-LINE
+                       AFTER ADVANCING 2 LINES
+           END-PERFORM.
+      *COLUMN HEADINGS FOR SIZE STUFF
+           PERFORM VARYING GEN-INDEX FROM 1 BY 1
+               UNTIL GEN-INDEX > 5
+                   MOVE CM-MAX TO O-GT-CM-MAX
+                   MOVE GT-SIZE TO O-GT-SIZE
+                   WRITE PRTLINE FROM GT-SIZE-LINE
+           END-PERFORM.
+
+
+       L3-MAJOR-HEADINGS.
+      *COMPANY LINES
+
+       L3-NORM-HEADINGS.
+      *COLUMN HEADINGS FOR NORMAL DATA
+
+       L3-READ.
+
+       L3-INTERPRET.
+           SEARCH SIZE-CONTAINER VARYING SIZE-INDEX
+               AT END DISPLAY "FIX YOUR FILE"
+               WHEN BRD-SIZE(SIZE-INDEX) = I-LENGTH
+                   MOVE CM-MAX(SIZE-INDEX) TO O-LENGTH
+                   ADD 1 TO GT-SIZE(SIZE-INDEX).
+
+       L3-CALCS.
+           ADD BRD-COST(I-BOARD) TO GT-SALES.
+           ADD BRD-COST(I-BOARD) TO BOARD-SALES(I-BOARD).
+
+
+       L3-PRINT.
+
+       end program CBLCJF.
